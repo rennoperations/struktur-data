@@ -101,10 +101,57 @@ void generateTopN(const vector<Transaksi>& dataset, int n) {
     }
 }
 
+// ==========================================
+// FITUR PENCARIAN (Tambahan)
+// ==========================================
+
+void searchByPelanggan(const vector<Transaksi>& dataset, string id_pelanggan_target) {
+    cout << "\nHASIL PENCARIAN UNTUK PELANGGAN: " << id_pelanggan_target << "\n";
+    int count = 0;
+    
+    // Pencarian Linier (O(n))
+    for (const auto& t : dataset) {
+        if (t.id_pelanggan == id_pelanggan_target) {
+            cout << "- Transaksi: " << t.id_transaksi 
+                 << " | Tgl: " << t.tanggal_transaksi 
+                 << " | Beli: " << t.nama_produk 
+                 << " (Qty: " << t.jumlah_pembelian << ")\n";
+            count++;
+        }
+    }
+    
+    if (count == 0) {
+        cout << "Tidak ada riwayat transaksi ditemukan untuk pelanggan ini.\n";
+    } else {
+        cout << "Total: " << count << " transaksi ditemukan.\n";
+    }
+}
+
+void searchByProduk(const vector<Transaksi>& dataset, string id_produk_target) {
+    cout << "\n HASIL PENCARIAN UNTUK PRODUK: " << id_produk_target << " \n";
+    int count = 0;
+    
+    // Pencarian Linier (O(n))
+    for (const auto& t : dataset) {
+        if (t.id_produk == id_produk_target) {
+            cout << "- Transaksi: " << t.id_transaksi 
+                 << " | Pelanggan: " << t.id_pelanggan 
+                 << " | Tgl: " << t.tanggal_transaksi << "\n";
+            count++;
+        }
+    }
+    
+    if (count == 0) {
+        cout << "Tidak ada transaksi yang memuat produk ini.\n";
+    } else {
+        cout << "Total: " << count << " transaksi ditemukan.\n";
+    }
+}
+
 // 4. MAIN PROGRAM & SISTEM TIMER
 int main() {
     vector<Transaksi> riwayat_transaksi;
-    int jumlah_data_uji = 5378; 
+    int jumlah_data_uji = 5378; // <-- ganti sebelah sini mal pake 1-5378 buat uji coba dengan jumlah data yang berbeda
     
     cout << "=== MEMULAI PROGRAM ===" << endl;
     
@@ -115,12 +162,27 @@ int main() {
     cout << "Waktu Load Data: " << duration_load.count() << " ms\n";
 
     auto start_rekomendasi = high_resolution_clock::now();
-    generateTopN(riwayat_transaksi, 5);
+    generateTopN(riwayat_transaksi, 5); // <-- ganti sebelah sini mal pake jumlah N yang mau direkomendasikan
     auto stop_rekomendasi = high_resolution_clock::now();
     auto duration_rekomendasi = duration_cast<milliseconds>(stop_rekomendasi - start_rekomendasi);
     
     cout << "\nWaktu Eksekusi Rekomendasi: " << duration_rekomendasi.count() << " ms\n";
-    cout << "=======================" << endl;
+
+    cout << "\n=== PENGUJIAN KECEPATAN PENCARIAN ===" << endl;
+    
+    auto start_search_pelanggan = high_resolution_clock::now();
+    searchByPelanggan(riwayat_transaksi, "CUST_016"); // <-- ganti sebelah sini mal pake ID pelanggan yang mau dicari
+    auto stop_search_pelanggan = high_resolution_clock::now();
+    auto durasi_search_pelanggan = duration_cast<microseconds>(stop_search_pelanggan - start_search_pelanggan);
+    
+    cout << "Waktu Eksekusi Search Pelanggan: " << durasi_search_pelanggan.count() << " mikrodetik\n";
+
+    auto start_search_produk = high_resolution_clock::now();
+    searchByProduk(riwayat_transaksi, "PRD_201");// <-- ganti sebelah sini mal pake ID produk yang mau dicari
+    auto stop_search_produk = high_resolution_clock::now();
+    auto durasi_search_produk = duration_cast<microseconds>(stop_search_produk - start_search_produk);
+    
+    cout << "Waktu Eksekusi Search Produk: " << durasi_search_produk.count() << " mikrodetik\n";
 
     return 0;
 }
