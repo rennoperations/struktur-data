@@ -340,7 +340,7 @@ int main() {
     auto t0 = high_resolution_clock::now();
     loadData("dataset_rekomendasi_final.csv", dataset, jumlah);
     auto t1 = high_resolution_clock::now();
-    cout << "Waktu load: " << duration_cast<milliseconds>(t1 - t0).count() << " ms\n";
+    cout << "Waktu load: " << duration_cast<microseconds>(t1 - t0).count() << " mikrodetik\n";
 
     // Bangun BST
     cout << "\nMembangun BST...\n";
@@ -348,7 +348,7 @@ int main() {
     root    = buildBST(dataset);
     auto t3 = high_resolution_clock::now();
     cout << "BST selesai dibangun. Waktu: "
-         << duration_cast<milliseconds>(t3 - t2).count() << " ms\n";
+         << duration_cast<microseconds>(t3 - t2).count() << " mikrodetik\n";
     loaded = true;
 
     int pilihan;
@@ -376,7 +376,7 @@ int main() {
             auto s = high_resolution_clock::now();
             loadData("dataset_rekomendasi_final.csv", dataset, jumlah);
             auto e = high_resolution_clock::now();
-            cout << "Waktu load: " << duration_cast<milliseconds>(e - s).count() << " ms\n";
+            cout << "Waktu load: " << duration_cast<microseconds>(e - s).count() << " mikrodetik\n";
             cout << "Membangun ulang BST...\n";
             root   = buildBST(dataset);
             loaded = true;
